@@ -7,7 +7,7 @@ interface IProps {
 }
 
 function Layout({ children }: IProps) {
-  return (
+    return (
       <Container>
         {children}
       </Container>
@@ -20,9 +20,10 @@ const Container = styled(Div100vh)`
   align-items: center;
   background-color: #000000;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  max-width: 600px;
   position: relative;
+  max-width: 600px;
   width: 100vw;
 `
+

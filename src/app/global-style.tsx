@@ -9,17 +9,30 @@ const GlobalStyle = createGlobalStyle<{ theme: ITheme }>`
 }
 
 body {
+  align-items: center;
+  background-color: #343434;
+  display: flex;
+  flex-direction: column;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
+  justify-content: center;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6, p, input, button{
   color: ${({ theme }) => theme.palette.text.main};
   font-family: 'Roboto', sans-serif;
   letter-spacing: normal;
   line-height: normal;
   margin: 0;
 }
+
+input {
+    background-color: transparent;
+    font-size: 18px;
+    height: 48px;
+    padding: 0 16px;
+    outline: none;
+  }
 
 p.error {
   color: ${({ theme }) => theme.palette.error.main};
