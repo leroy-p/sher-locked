@@ -101,5 +101,5 @@ export function usePuzzle() {
         setDisabled(false)
     }
 
-    return { cells, showDialog, moveCount, moveCell, restart }
+    return { cells, showDialog, moveCount, personalBest, moveCell, restart }
 }

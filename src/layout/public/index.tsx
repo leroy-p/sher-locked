@@ -9,7 +9,7 @@ interface IProps {
 function Layout({ children }: IProps) {
   return (
       <Container>
-        {children}
+          {children}
       </Container>
   )
 }
@@ -18,11 +18,15 @@ export default Layout
 
 const Container = styled(Div100vh)`
   align-items: center;
-  background-color: #000000;
+  background-color: #86d2d7;
+  background-image: url('/assets/image/raccoon-pattern.png');
+  background-position: center;
+  background-size: cover;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  max-width: 600px;
+  mix-blend-mode: multiply;
+  padding: 0 32px;
   position: relative;
   width: 100vw;
 `

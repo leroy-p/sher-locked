@@ -23,7 +23,6 @@ const Container = styled(Div100vh)`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  max-width: 600px;
   width: 100vw;
 `
 

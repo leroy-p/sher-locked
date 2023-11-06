@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import Layout from '../components/motus/layout'
+import ScoreDialog from '../components/score-dialog'
 import { useMotus } from '../hooks/use-motus'
-import Dialog from '../components/dialog'
 import { RoutePath, generateRoutePath } from '../app/router-config'
 
 interface IProps {}
@@ -34,30 +35,53 @@ function Motus(props: IProps) {
         submitAttempt={submitAttempt}
         success={success}
     >
+        <>
           <Container>
-            <img src="/assets/image/raccoon.png" />
-            {attemps.map((attempt, attempIndex) => (
-                <div key={attempIndex}>
-                    {attempIndex > results.length - 1 && attempt.map((letter, letterIndex) => (
-                        <LetterContainer index={letterIndex} key={letterIndex}>
-                            <p>{letter}</p>
-                        </LetterContainer>
-                    ))}
-                    {attempIndex < results.length && results[attempIndex].map((item, itemIndex) => (
-                        <LetterContainer index={itemIndex} isPerfect={item.isPerfect} isCorrect={item.isCorrect} key={itemIndex}>
-                            <p>{item.letter}</p>
-                        </LetterContainer>
-                    ))}
-                </div>
-            ))}
-            <Dialog
-                action={{ label: 'Quitter', path: generateRoutePath(RoutePath.PASSWORD, {})}}
+            <img src="/assets/image/raccoon-5.png" />
+            <GridContainer>
+                {attemps.map((attempt, attempIndex) => (
+                    <div key={attempIndex}>
+                        {attempIndex > results.length - 1 && attempt.map((letter, letterIndex) => (
+                            <LetterContainer
+                                index={letterIndex}
+                                key={letterIndex}
+                                totalIndex={attempIndex * attemps[0].length + letterIndex}
+                                totalLength={attemps.length * attemps[0].length}
+                                wordLength={attemps[0].length}
+                            >
+                                <p>{letter}</p>
+                            </LetterContainer>
+                        ))}
+                        {attempIndex < results.length && results[attempIndex].map((item, itemIndex) => (
+                            <LetterContainer
+                                index={itemIndex}
+                                isPerfect={item.isPerfect}
+                                isCorrect={item.isCorrect}
+                                key={itemIndex}
+                                totalIndex={attempIndex * attemps[0].length + itemIndex}
+                                totalLength={attemps.length * attemps[0].length}
+                                wordLength={attemps[0].length}
+                            >
+                                <p>{item.letter}</p>
+                            </LetterContainer>
+                        ))}
+                    </div>
+                ))}
+            </GridContainer>
+            <ScoreDialog
+                action={{ label: 'Continuer', path: generateRoutePath(RoutePath.SECOND, {})}}
                 close={{ label: 'Rejouer', action: restart }}
-                title="Partie terminée"
-                texts={[`Score : ${score}`, `Record personnel : ${personalBest}`]}
+                personalBest={personalBest}
+                score={score}
+                title="Score"
                 visible={showDialog}
             />
           </Container>
+          <DesktopContainer>
+                  <img src="/assets/image/mobile.png" />
+                  <p>Jeu disponible uniquement sur mobile.</p>
+            </DesktopContainer>
+            </>
       </Layout>
   )
 }
@@ -65,52 +89,144 @@ function Motus(props: IProps) {
 export default Motus
 
 const Container = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-start;
-  position: relative;
-  width: 100%;
-
-  & > img {
-    height: auto;
-    margin-bottom: 48px;
-    width: 30%;
-  }
-
-  & > div {
     align-items: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-  }
+    position: relative;
+    width: 100%;
+
+    @media screen and (min-width: 820px) {
+      display: none;
+    }
+
+    & > img {
+        height: auto;
+        height: 80px;
+        left: calc(50% - 40px);
+        position: absolute;
+        top: -64px;
+        width: 80px;
+    }
 `
 
-const LetterContainer = styled.div<{ index: number; isPerfect?: boolean; isCorrect?: boolean }>`
+const GridContainer = styled.div`
     align-items: center;
-    background-color: ${({ isPerfect }) => isPerfect ? '#fa6666' : '#343434'};
-    border-bottom: solid 1px #ffffff;
-    border-left: ${({ index }) => index === 0 ? 'solid 1px #ffffff' : 'none'};
-    border-right: solid 1px #ffffff;
-    border-top: solid 1px #ffffff;
+    border-radius: 16px;
+    border-bottom: 5px solid #26293E;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media screen and (min-width: 820px) {
+        display: none;
+    }
+
+    & > div {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+`
+
+const LetterContainer = styled.div<{ index: number; isPerfect?: boolean; isCorrect?: boolean; totalIndex: number; totalLength: number; wordLength: number }>`
+    align-items: center;
+    background-color: #2e324d;
+    border-bottom: solid 1px #555c88;
+    border-left: ${({ index }) => index === 0 ? 'solid 1px #555c88' : 'none'};
+    border-right: solid 1px #555c88;
+    border-top: ${({ totalIndex, wordLength }) => totalIndex < wordLength ? 'solid 1px #555c88' : 'none'};
+    border-radius: ${({ totalIndex, wordLength, totalLength }) => {
+        if (totalIndex === 0) {
+            return '16px 0 0 0';
+        }
+
+        if (totalIndex === wordLength - 1) {
+            return '0 16px 0 0';
+        }
+
+        if (totalIndex === totalLength - 1) {
+            return '0 0 16px 0';
+        }
+
+        if (totalIndex === totalLength - wordLength) {
+            return '0 0 0 16px';
+        }
+    }};
     display: flex;
     flex-direction: row;
     justify-content: center;
     height: 40px;
     width: 40px;
 
+    @media screen and (min-width: 820px) {
+        display: none;
+    }
+
     & > p {
         align-items: center;
-        background-color: ${({ isPerfect, isCorrect }) => isCorrect && !isPerfect ? '#e8e09b' : 'transparent'};
-        border-radius: 20px;
+        background-color: ${({ isPerfect, isCorrect }) => {
+            if (isPerfect) return '#C55A5A'
+            if (isCorrect) return '#E5B53A'
+
+            return 'transparent'
+        }};
+
+        border-radius: ${({ isPerfect, isCorrect, totalIndex, wordLength, totalLength }) => {
+            if (isPerfect) {
+                if (totalIndex === 0) {
+                    return '12px 0 0 0';
+                }
+
+                if (totalIndex === wordLength - 1) {
+                    return '0 12px 0 0';
+                }
+
+                if (totalIndex === totalLength - 1) {
+                    return '0 0 12px 0';
+                }
+
+                if (totalIndex === totalLength - wordLength) {
+                    return '0 0 0 12px';
+                }
+
+                return 0
+            }
+            if (isCorrect) return '20px'
+
+            return '0'
+        }};
         color: #ffffff;
-        font-size: 32px;
+        font-size: 18px;
+        font-weight: 700;
         display: flex;
         flex-direction: row;
-        height: 32px;
+        height: ${({ isPerfect }) => isPerfect ? 'calc(100% - 8px)' : '32px'};
         justify-content: center;
         padding: 4px;
-        width: 32px;
+        width: ${({ isPerfect }) => isPerfect ? 'calc(100% - 8px)' : '32px'};
     }
+`
+
+const DesktopContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+
+  @media screen and (max-width: 820px) {
+      display: none;
+  }
+
+  & > img {
+    height: 96px;
+    width: 96px;
+  }
+
+  & > p {
+    font-size: 20px;
+  }
 `

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { usePuzzle } from '../hooks/use-puzzle'
 import { RoutePath, generateRoutePath } from '../app/router-config'
 import Layout from '../components/puzzle/layout'
-import Dialog from '../components/dialog'
+import ScoreDialog from '../components/score-dialog'
 
 interface IProps {}
 
@@ -13,15 +13,17 @@ function Puzzle(props: IProps) {
         cells,
         showDialog,
         moveCount,
+        personalBest,
         moveCell,
         restart,
     } = usePuzzle()
 
     return (
       <Layout>
+        <>
           <Container>
-              <img src="/assets/image/raccoon.png" />
               <BoardContainer>
+                <img src="/assets/image/raccoon-5.png" />
                 {cells.map((row, rowIndex) => (
                     row.map((cell, cellIndex) => (
                         <CellContainer
@@ -30,18 +32,26 @@ function Puzzle(props: IProps) {
                             key={rowIndex * 4 + cellIndex}
                             onClick={() => moveCell(rowIndex, cellIndex)}
                             value={cell}
-                        />
+                        >
+                          <div />
+                        </CellContainer>
                     ))
                 ))}
               </BoardContainer>
-              <Dialog
-                action={{ label: 'Quitter', path: generateRoutePath(RoutePath.CITY, {})}}
+              <ScoreDialog
+                action={{ label: 'Continuer', path: generateRoutePath(RoutePath.PUZZLE, {})}}
                 close={{ label: 'Rejouer', action: restart }}
-                title="Partie terminée"
-                texts={[`Nombre de coups : ${moveCount}`, `Record personnel : ${moveCount}`]}
+                personalBest={personalBest}
+                score={moveCount}
+                title="Coups"
                 visible={showDialog}
             />
           </Container>
+          <DesktopContainer>
+                  <img src="/assets/image/mobile.png" />
+                  <p>Jeu disponible uniquement sur mobile.</p>
+            </DesktopContainer>
+            </>
       </Layout>
   )
 }
@@ -59,28 +69,42 @@ const Container = styled.div`
   padding: 48px 0;
   width: 100%;
 
-  & > img {
-    height: auto;
-    width: 30%;
+  @media screen and (min-width: 820px) {
+      display: none;
   }
 `
 
 const BoardContainer = styled.div`
     align-items: center;
+    border-radius: 16px;
+    border-bottom: 5px solid #26293E;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     height: 400px;
     justify-content: center;
-    padding: 0 24px;
-    width: 100%;
+    position: relative;
+    width: calc(100% - 48px);
+
+    @media screen and (min-width: 820px) {
+      display: none;
+    }
+
+    & > img {
+        height: auto;
+        height: 80px;
+        left: calc(50% - 40px);
+        position: absolute;
+        top: -64px;
+        width: 80px;
+    }
 `
 
 const CellContainer = styled.div<{ index: number; isEmpty?: boolean; value: number }>`
     align-items: center;
-    background-image: ${({ isEmpty }) => isEmpty ? 'none' : "url('/assets/image/london.png')"};
+    background-image: ${({ isEmpty }) => isEmpty ? 'none' : "url('/assets/image/buckingham.png')"};
     background-size: 400% 400%;
-    background-color: #343434;
+    background-color: #222639;
     background-position: ${({ value }) => {
         const x = (value - 1) % 4
         const y = Math.floor((value - 1) / 4)
@@ -89,13 +113,81 @@ const CellContainer = styled.div<{ index: number; isEmpty?: boolean; value: numb
 
         return `-${100 * x}% -${100 * y}%`
     }};
-    border-bottom: solid 1px #ffffff;
-    border-left: ${({ index }) => index % 4 === 0 ? 'solid 1px #ffffff' : 'none'};
-    border-right: solid 1px #ffffff;
-    border-top: ${({ index }) => index < 4 ? 'solid 1px #ffffff' : 'none'};
+    border-bottom: solid 1px #555c88;
+    border-left: ${({ index }) => index % 4 === 0 ? 'solid 1px #555c88' : 'none'};
+    border-right: solid 1px #555c88;
+    border-top: ${({ index }) => index < 4 ? 'solid 1px #555c88' : 'none'};
+    border-radius: ${({ index }) => {
+        if (index === 0) {
+            return '16px 0 0 0';
+        }
+
+        if (index === 3) {
+            return '0 16px 0 0';
+        }
+
+        if (index === 12) {
+            return '0 0 0 16px';
+        }
+
+        if (index === 15) {
+            return '0 0 16px 0';
+        }
+    }};
     display: flex;
     flex-direction: row;
     height: 25%;
     justify-content: center;
+    padding: 3px;
     width: 25%;
+
+    @media screen and (min-width: 820px) {
+      display: none;
+    }
+
+    & > div {
+      background-color: ${({ isEmpty }) => isEmpty ? '#3E4366' : "transparent"};
+      border-radius: ${({ index }) => {
+        if (index === 0) {
+            return '13px 0 0 0';
+        }
+
+        if (index === 3) {
+            return '0 13px 0 0';
+        }
+
+        if (index === 12) {
+            return '0 0 0 13px';
+        }
+
+        if (index === 15) {
+            return '0 0 13px 0';
+        }
+      }};
+      box-shadow: ${({ isEmpty }) => isEmpty ? '0px 0px 32px 0px rgba(0, 0, 0, 0.45) inset' : 'none'};
+      height: 100%;
+      width: 100%;
+    }
+`
+
+const DesktopContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+
+  @media screen and (max-width: 820px) {
+      display: none;
+  }
+
+  & > img {
+    height: 96px;
+    width: 96px;
+  }
+
+  & > p {
+    font-size: 20px;
+  }
 `

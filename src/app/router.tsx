@@ -5,8 +5,8 @@ import { RoutePath } from './router-config'
 import Root from '../pages/root'
 import NotFound from '../pages/error/not-found'
 import Loading from '../pages/loading'
-import Password from '../pages/password'
-import City from '../pages/city'
+import Second from '../pages/second'
+import Third from '../pages/third'
 import Rythm from '../pages/rythm'
 import Motus from '../pages/motus'
 import Puzzle from '../pages/puzzle'
@@ -24,12 +24,12 @@ const routes: IRouteParams[] = [
     path: RoutePath.ROOT,
   },
   {
-    Component: <Password />,
-    path: RoutePath.PASSWORD,
+    Component: <Second />,
+    path: RoutePath.SECOND,
   },
   {
-    Component: <City />,
-    path: RoutePath.CITY,
+    Component: <Third />,
+    path: RoutePath.THIRD,
   },
   {
     Component: <Rythm />,

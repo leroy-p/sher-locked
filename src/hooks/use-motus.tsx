@@ -23,7 +23,8 @@ export function useMotus() {
         const personalBestMumber = personalBestItem ? parseInt(personalBestItem) : undefined
 
         setPersonalBest(personalBestMumber || 0)
-        setWordsList(shuffleArray(wordsToFind))
+        setWordsList(wordsToFind)
+        // setWordsList(shuffleArray(wordsToFind))
         setWordToFindIndex(0)
     }, [])
 

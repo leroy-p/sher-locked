@@ -18,12 +18,11 @@ export default Layout
 
 const Container = styled(Div100vh)`
   align-items: center;
-  background-color: #000000;
+  background: linear-gradient(180deg, rgba(132, 138, 187, 0.30) 0%, rgba(0, 0, 0, 0.21) 100%), #3E4366;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  max-width: 600px;
   width: 100vw;
 `
 

@@ -6,8 +6,8 @@ export function generateRoutePath<T extends keyof IRoutePathParams>(path: T, par
 
 export enum RoutePath {
   ROOT = '/',
-  PASSWORD = '/password',
-  CITY = '/city',
+  SECOND = '/second',
+  THIRD = '/third',
   RYTHM = '/rythm',
   MOTUS = '/motus',
   PUZZLE = '/puzzle',
@@ -16,8 +16,8 @@ export enum RoutePath {
 
 export interface IRoutePathParams {
   [RoutePath.ROOT]: {}
-  [RoutePath.PASSWORD]: {}
-  [RoutePath.CITY]: {}
+  [RoutePath.SECOND]: {}
+  [RoutePath.THIRD]: {}
   [RoutePath.RYTHM]: {}
   [RoutePath.MOTUS]: {}
   [RoutePath.PUZZLE]: {}

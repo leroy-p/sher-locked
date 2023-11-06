@@ -33,6 +33,9 @@ function Layout({ children, foundLetters, success, failure, addLetter, submitAtt
     const highlightedLetters = [...foundLetters]
     highlightedLetters.shift()
 
+    console.log('foundLetters', foundLetters)
+    console.log('highlightedLetters', highlightedLetters)
+
     return (
       <Container>
         <MainContainer>
@@ -43,6 +46,7 @@ function Layout({ children, foundLetters, success, failure, addLetter, submitAtt
                 {keyboardEntries.map((entry, index) => (
                     <KeyboardButton
                         highlighted={highlightedLetters.includes(entry.toUpperCase())}
+                        large={entry === 'del' || entry === 'entry'}
                         index={index}
                         key={index}
                         text={entry.length > 1}
@@ -72,25 +76,29 @@ function Layout({ children, foundLetters, success, failure, addLetter, submitAtt
 export default Layout
 
 const Container = styled(Div100vh)`
-  align-items: center;
-  background-color: #000000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  max-width: 600px;
-  width: 100vw;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(132, 138, 187, 0.30) 0%, rgba(0, 0, 0, 0.21) 100%), #3E4366;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    width: 100vw;
 `
 
 const MainContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 40vw);
-  justify-content: flex-start;
-  padding-top: 48px;
-  position: relative;
-  width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 142px);
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    @media screen and (min-width: 820px) {
+      height: 100%;
+    }
 `
 
 const KeyBoardContainer = styled.div`
@@ -98,42 +106,45 @@ const KeyBoardContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 40vw;
-    max-height: 200px;
+    gap: 2px;
+    height: 142px;
     justify-content: center;
     position: relative;
-    padding: 24px;
-    width: 100%;
+    width: 340px;
+
+    @media screen and (min-width: 820px) {
+      display: none;
+    }
 `
 
-const KeyboardButton = styled.button<{ index: number; text?: boolean; highlighted?: boolean }>`
+const KeyboardButton = styled.button<{ index: number; text?: boolean; highlighted?: boolean; large?: boolean }>`
     align-items: center;
-    background-color: ${({ highlighted }) => highlighted ? '#fa6666' : '#343434'};
-    border-bottom: solid 1px #ffffff;
-    border-left: ${({ index }) => index === 0 || index === 10 || index === 20 ? 'solid 1px #ffffff' : 'none'};
-    border-right: solid 1px #ffffff;
-    border-top: ${({ index }) => index < 10 ? 'solid 1px #ffffff' : 'none'};
+    background-color: ${({ highlighted }) => highlighted ? '#fa6666' : '#555C88'};
+    border-radius: 6px;
+    border-top: 1px solid #2E324D;
+    border-right: 1px solid #2E324D;
+    border-bottom: 4px solid #2E324D;
+    border-left: 1px solid #2E324D;
     color: #ffffff;
     display: flex;
     flex-direction: row;
     flex-shrink: 0;
     font-size: ${({ text }) => text ? '12px' : '24px'};
-    height: calc((100vw - 48px) / 10);
-    max-height: 52px;
+    height: 46px;
     justify-content: center;
-    min-width: 10%;
+    margin: 1px 0;
     padding: 4px;
+    width: ${({ large }) => large ? '66px' : '32px'};
 `
 
 const SuccessContainer = styled.div`
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 40vw;
+    height: 142px;
     justify-content: flex-end;
     gap: 16px;
     position: relative;
-    padding: 24px;
     width: 100%;
 
     & > h6 {
@@ -141,9 +152,16 @@ const SuccessContainer = styled.div`
     }
 
     & > button {
-        background-color: #343434;
-        height: 40px;
-        padding: 0 16px;
+        border-radius: 24px;
+        border-right: 1px solid rgba(255, 255, 255, 0.50);
+        border-bottom: 5px solid rgba(255, 255, 255, 0.50);
+        border-left: 1px solid rgba(255, 255, 255, 0.50);
+        background: rgba(255, 255, 255, 0.10);
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 800;
+        height: 64px;
         text-transform: uppercase;
+        width: 300px;
   }
 `

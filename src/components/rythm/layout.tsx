@@ -41,11 +41,10 @@ export default Layout
 
 const Container = styled(Div100vh)`
   align-items: center;
-  background-color: #000000;
+  background: linear-gradient(180deg, rgba(132, 138, 187, 0.30) 0%, rgba(0, 0, 0, 0.21) 100%), #3E4366;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  max-width: 600px;
   position: relative;
   width: 100vw;
 `
@@ -66,18 +65,34 @@ const SideContainer = styled(Div100vh)`
 
   .layout-side-blue {
     background-color: #5cb1ed;
+
+    @media screen and (min-width: 820px) {
+      background-color: transparent;
+    }
   }
 
   .layout-side-orange {
     background-color: #e6b25e;
+
+    @media screen and (min-width: 820px) {
+      background-color: transparent;
+    }
   }
 
   .layout-side-pink {
     background-color: #fa6666;
+
+    @media screen and (min-width: 820px) {
+      background-color: transparent;
+    }
   }
 
   .layout-side-yellow {
     background-color: #e8e09b;
+
+    @media screen and (min-width: 820px) {
+      background-color: transparent;
+    }
   }
 `
 
@@ -88,22 +103,4 @@ const MainContainer = styled(Div100vh)`
   height: 100%;
   justify-content: center;
   width: calc(100% - 16px);
-`
-
-const ScoreContainer = styled.div`
-  align-items: center;
-  background-color: #343434;
-  bottom: 0;
-  display: flex;
-  flex-direction: row;
-  height: 48px;
-  justify-content: space-between;
-  left: 0;
-  padding: 24px;
-  position: absolute;
-  width: 100%;
-
-  & > p {
-    text-transform: uppercase;
-  }
 `
